@@ -7,6 +7,7 @@ import org.nutz.dao.sql.PojoMaker;
 import org.nutz.dao.sql.Sql;
 import org.nutz.lang.Each;
 import javax.annotation.Resource;
+import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -19,8 +20,14 @@ public class BaseDao<T> {
 
     @Resource
     protected Dao dao;
-    Class<T> clazz;
+    private Class<T> clazz;
 
+    public BaseDao()
+    {
+        ParameterizedType type = (ParameterizedType) this.getClass()
+                .getGenericSuperclass();
+        this.clazz = (Class<T>) type.getActualTypeArguments()[0];
+    }
     /**
      * 把刀
      *
