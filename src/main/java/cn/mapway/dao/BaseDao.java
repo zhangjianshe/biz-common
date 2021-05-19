@@ -21,11 +21,18 @@ public class BaseDao<T> {
     protected Dao dao;
     Class<T> clazz;
 
+    /**
+     * 把刀
+     *
+     * @return {@link Dao}
+     */
     public Dao getDao() {
         return dao;
     }
 
     /**
+     * 元
+     *
      * @return 数据源的元数据
      */
     public DatabaseMeta meta() {
@@ -33,8 +40,10 @@ public class BaseDao<T> {
     }
 
     /**
+     * 中的
+     *
      * @return 一个 Sql 管理接口，你可以通过这个接口管理你自定义的 SQL
-     * @see org.nutz.dao.SqlManager
+     * @see SqlManager
      */
     public SqlManager sqls() {
         return dao.sqls();
@@ -45,6 +54,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 执行
      * 执行一组 Sql，这些 Sql 将会一起被提交
      *
      * @param sqls 要被执行的 Sql 数组
@@ -54,6 +64,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 运行
      * 这个方法试图给你最大的灵活性，因为你的 ConnCallback 实现类将得到一个 Connection 接口
      * 的实例。请注意，你不需要关闭这个连接，这个函数在退出时会替你关闭连接。
      * <p>
@@ -63,13 +74,14 @@ public class BaseDao<T> {
      * <li>你创建的东西 （比如 ResultSet） 你来维护其生命周期
      * </ul>
      *
-     * @param callback
+     * @param callback 回调
      */
     public void run(ConnCallback callback) {
         dao.run(callback);
     }
 
     /**
+     * 得到对象
      * 从一个 ResultSet 中获取一个对象。
      * <p>
      * 因为 Dao 接口可以知道一个 POJO 的映射细节，这个函数可以帮你节省一点体力。
@@ -82,11 +94,20 @@ public class BaseDao<T> {
         return dao.getObject(clazz, rs, fm);
     }
 
+    /**
+     * 得到对象
+     *
+     * @param rs     rs
+     * @param fm     调频
+     * @param prefix 前缀
+     * @return {@link T}
+     */
     public T getObject(ResultSet rs, FieldMatcher fm, String prefix) {
         return dao.getObject(clazz, rs, fm, prefix);
     }
 
     /**
+     * 插入
      * 将一个对象插入到一个数据源。
      * <p>
      * 声明了 '@Id'的字段会在插入数据库时被忽略，因为数据库会自动为其设值。如果想手动设置，请设置 '@Id(auto=false)'
@@ -118,24 +139,32 @@ public class BaseDao<T> {
     }
 
     /**
+     * 插入
      * 将一个对象按FieldFilter过滤后,插入到一个数据源。
-     * <p/>
      * <code>dao.insert(pet, FieldFilter.create(Pet.class, FieldMatcher.create(false)));</code>
      *
      * @param obj    要被插入的对象
      * @param filter 字段过滤器, 其中FieldMatcher.isIgnoreId生效
      * @return 插入后的对象
-     * @see org.nutz.dao.Dao#insert(Object)
+     * @see Dao#insert(Object)
      */
     public T insert(T obj, FieldFilter filter) {
         return dao.insert(obj, filter);
     }
 
+    /**
+     * 插入
+     *
+     * @param obj     obj
+     * @param actived 中共
+     * @return {@link T}
+     */
     public T insert(T obj, String actived) {
         return dao.insert(obj, actived);
     }
 
     /**
+     * 插入
      * 自由的向一个数据表插入一条数据。数据用名值链描述
      *
      * @param tableName 数据表名
@@ -146,6 +175,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 插入
      * 与 insert(String tableName, Chain chain) 一样，不过，数据表名，将取自 POJO 的数据表声明，请参看
      * '@Table' 注解的详细说明
      *
@@ -157,6 +187,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 快速插入
      * 快速插入一个对象。 对象的 '@Prev' 以及 '@Next' 在这个函数里不起作用。
      * <p>
      * 即，你必须为其设置好值，它会统一采用 batch 的方法插入
@@ -171,12 +202,14 @@ public class BaseDao<T> {
      *            <li>Map
      *            </ul>
      *            <b style=color:red>注意：</b> 如果是集合，数组或者 Map，所有的对象必须类型相同，否则可能会出错
+     * @return {@link T}
      */
     public T fastInsert(T obj) {
         return dao.fastInsert(obj);
     }
 
     /**
+     * 插入与
      * 将对象插入数据库同时，也将符合一个正则表达式的所有关联字段关联的对象统统插入相应的数据库
      * <p>
      * 关于关联字段更多信息，请参看 '@One' | '@Many' | '@ManyMany' 更多的描述
@@ -188,11 +221,12 @@ public class BaseDao<T> {
      * @see org.nutz.dao.entity.annotation.Many
      * @see org.nutz.dao.entity.annotation.ManyMany
      */
-    T insertWith(T obj, String regex) {
+    public T insertWith(T obj, String regex) {
         return dao.insertWith(obj, regex);
     }
 
     /**
+     * 插入链接
      * 根据一个正则表达式，仅将对象所有的关联字段插入到数据库中，并不包括对象本身
      *
      * @param obj   数据对象
@@ -207,6 +241,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 插入的关系
      * 将对象的一个或者多个，多对多的关联信息，插入数据表
      *
      * @param obj   对象
@@ -219,6 +254,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 更新
      * 更新一个对象。对象必须有 '@Id' 或者 '@Name' 或者 '@PK' 声明。
      * <p>
      * 并且调用这个函数前， 主键的值必须保证是有效，否则会更新失败
@@ -239,13 +275,14 @@ public class BaseDao<T> {
      *            </ul>
      *            <b style=color:red>注意：</b> 如果是集合，数组或者 Map，所有的对象必须类型相同，否则可能会出错
      * @return 返回实际被更新的记录条数，一般的情况下，如果更新成功，返回 1，否则，返回 0
-     * @see org.nutz.dao.FieldFilter
+     * @see FieldFilter
      */
     public int update(T obj) {
         return dao.update(obj);
     }
 
     /**
+     * 更新
      * 更新对象一部分字段
      *
      * @param obj     对象
@@ -257,29 +294,55 @@ public class BaseDao<T> {
     }
 
     /**
+     * 更新
      * 更新对象一部分字段
      *
-     * @param obj     对象
-     * @param actived 正则表达式描述要被更新的字段
+     * @param obj        对象
+     * @param actived    正则表达式描述要被更新的字段
+     * @param locked     锁着的
+     * @param ignoreNull 忽略空
      * @return 返回实际被更新的记录条数，一般的情况下，如果更新成功，返回 1，否则，返回 0
      */
     public int update(T obj, String actived, String locked, boolean ignoreNull) {
         return dao.update(obj, actived, locked, ignoreNull);
     }
 
+    /**
+     * 更新
+     *
+     * @param obj         obj
+     * @param fieldFilter 字段过滤
+     * @return int
+     */
     public int update(T obj, FieldFilter fieldFilter) {
         return dao.update(obj, fieldFilter);
     }
 
+    /**
+     * 更新
+     *
+     * @param obj         obj
+     * @param fieldFilter 字段过滤
+     * @param cnd         cnd
+     * @return int
+     */
     public int update(T obj, FieldFilter fieldFilter, Condition cnd) {
         return dao.update(obj, fieldFilter, cnd);
     }
 
+    /**
+     * 更新
+     *
+     * @param obj obj
+     * @param cnd cnd
+     * @return int
+     */
     public int update(T obj, Condition cnd) {
         return dao.update(obj, cnd);
     }
 
     /**
+     * 更新忽略空
      * 更新一个对象，并且忽略所有 null 字段。
      * <p>
      * 注意: 基本数据类型都是不可能为null的,这些字段肯定会更新
@@ -302,6 +365,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 更新
      * 与 update(String tableName, Chain chain, Condition cnd) 一样，不过，数据表名，将取自
      * POJO 的数据表声明，请参看 '@Table' 注解的详细说明
      *
@@ -315,6 +379,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 更新与
      * 将对象更新的同时，也将符合一个正则表达式的所有关联字段关联的对象统统更新
      * <p>
      * 关于关联字段更多信息，请参看 '@One' | '@Many' | '@ManyMany' 更多的描述
@@ -331,6 +396,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 更新的链接
      * 根据一个正则表达式，仅更新对象所有的关联字段，并不包括对象本身
      *
      * @param obj   数据对象
@@ -345,6 +411,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 更新关系
      * 多对多关联是通过一个中间表将两条数据表记录关联起来。
      * <p>
      * 而这个中间表可能还有其他的字段，比如描述关联的权重等
@@ -363,15 +430,32 @@ public class BaseDao<T> {
 
     }
 
+    /**
+     * 查询
+     *
+     * @param cnd     cnd
+     * @param pager   寻呼机
+     * @param matcher 匹配器
+     * @return {@link List}
+     */
     public List<T> query(Condition cnd, Pager pager, FieldMatcher matcher) {
         return dao.query(clazz, cnd, pager, matcher);
     }
 
+    /**
+     * 查询
+     *
+     * @param cnd   cnd
+     * @param pager 寻呼机
+     * @param regex 正则表达式
+     * @return {@link List}
+     */
     public List<T> query(Condition cnd, Pager pager, String regex) {
         return dao.query(clazz, cnd, pager, regex);
     }
 
     /**
+     * 查询
      * 查询一组对象。你可以为这次查询设定条件，并且只获取一部分对象（翻页）
      *
      * @param cnd   WHERE 条件。如果为 null，将获取全部数据，顺序为数据库原生顺序
@@ -383,6 +467,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 查询
      * 查询一组对象。你可以为这次查询设定条件
      *
      * @param cnd WHERE 条件。如果为 null，将获取全部数据，顺序为数据库原生顺序<br>
@@ -395,6 +480,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 每一个
      * 对一组对象进行迭代，这个接口函数非常适用于很大的数据量的集合，因为你不可能把他们都读到内存里
      *
      * @param cnd      WHERE 条件。如果为 null，将获取全部数据，顺序为数据库原生顺序
@@ -407,6 +493,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 每一个
      * 对一组对象进行迭代，这个接口函数非常适用于很大的数据量的集合，因为你不可能把他们都读到内存里
      *
      * @param cnd      WHERE 条件。如果为 null，将获取全部数据，顺序为数据库原生顺序
@@ -419,6 +506,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 删除
      * 根据对象 ID 删除一个对象。它只会删除这个对象，关联对象不会被删除。
      * <p>
      * 你的对象必须在某个字段声明了注解 '@Id'，否则本操作会抛出一个运行时异常
@@ -434,6 +522,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 删除
      * 根据对象 Name 删除一个对象。它只会删除这个对象，关联对象不会被删除。
      * <p>
      * 你的对象必须在某个字段声明了注解 '@Name'，否则本操作会抛出一个运行时异常
@@ -449,9 +538,11 @@ public class BaseDao<T> {
     }
 
     /**
+     * deletex
      * 根据复合主键，删除一个对象。该对象必须声明 '@PK'，并且，给定的参数顺序 必须同 '@PK' 中声明的顺序一致，否则会产生不可预知的错误。
      *
      * @param pks 复合主键需要的参数，必须同 '@PK'中声明的顺序一致
+     * @return int
      */
     public int deletex(Object... pks) {
         return dao.deletex(clazz, pks);
@@ -459,11 +550,13 @@ public class BaseDao<T> {
 
 
     /**
+     * 获取
      * 根据对象 ID 获取一个对象。它只会获取这个对象，关联对象不会被获取。
      * <p>
      * 你的对象必须在某个字段声明了注解 '@Id'，否则本操作会抛出一个运行时异常
      *
      * @param id 对象 ID
+     * @return {@link T}
      * @see org.nutz.dao.entity.annotation.Id
      */
     public T fetch(long id) {
@@ -471,6 +564,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 获取
      * 根据对象 Name 获取一个对象。它只会获取这个对象，关联对象不会被获取。
      * <p>
      * 你的对象必须在某个字段声明了注解 '@Name'，否则本操作会抛出一个运行时异常
@@ -484,20 +578,23 @@ public class BaseDao<T> {
     }
 
     /**
+     * fetchx
      * 根据复合主键，获取一个对象。该对象必须声明 '@PK'，并且，给定的参数顺序 必须同 '@PK' 中声明的顺序一致，否则会产生不可预知的错误。
      *
      * @param pks 复合主键需要的参数，必须同 '@PK'中声明的顺序一致
+     * @return {@link T}
      */
     public T fetchx(Object... pks) {
         return dao.fetchx(clazz, pks);
     }
 
     /**
+     * 获取
      * 根据 WHERE 条件获取一个对象。如果有多个对象符合条件，将只获取 ResultSet 第一个记录
      *
      * @param cnd WHERE 条件
      * @return 对象本身
-     * @see org.nutz.dao.Condition
+     * @see Condition
      * @see org.nutz.dao.entity.annotation.Name
      */
     public T fetch(Condition cnd) {
@@ -506,6 +603,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 清晰的
      * 根据一个 WHERE 条件，清除一组对象。只包括对象本身，不包括关联字段
      *
      * @param cnd 查询条件，如果为 null，则全部清除
@@ -517,7 +615,8 @@ public class BaseDao<T> {
 
 
     /**
-     * 获取实体描述, 其中包含了Java Pojo<-->数据库的全部映射信息
+     * 得到实体
+     * 获取实体描述, 其中包含了Java Pojo数据库的全部映射信息
      *
      * @return 实体描述
      */
@@ -526,6 +625,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 数
      * 根据条件，计算某个对象在数据库中有多少条记录
      *
      * @param cnd WHERE 条件
@@ -546,6 +646,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 得到最大id
      * 获取某个对象，最大的 ID 值。这个对象必须声明了 '@Id'
      *
      * @return 最大 ID 值
@@ -556,6 +657,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 创建寻呼机
      * 根据数据源的类型，创建一个翻页对象
      *
      * @param pageNumber 第几页 ，从 1 开始。
@@ -568,6 +670,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 执行
      * 执行单条自定义SQL
      *
      * @param sql 自定义SQL对象
@@ -579,6 +682,7 @@ public class BaseDao<T> {
 
 
     /**
+     * 插入
      * 以特殊规则执行insert
      *
      * @param t              实例对象
@@ -592,6 +696,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 插入或更新
      * 根据对象的主键(@Id/@Name/@Pk)先查询, 如果存在就更新, 不存在就插入
      *
      * @param t 对象
@@ -602,6 +707,7 @@ public class BaseDao<T> {
     }
 
     /**
+     * 插入或更新
      * 根据对象的主键(@Id/@Name/@Pk)先查询, 如果存在就更新, 不存在就插入
      *
      * @param t                 对象
@@ -614,10 +720,11 @@ public class BaseDao<T> {
     }
 
     /**
+     * 如果匹配更新和增加
      * 乐观锁, 以特定字段的值作为限制条件,更新对象,并自增该字段.
-     * <p/>
+
      * 执行的sql如下:
-     * <p/>
+
      * <code>update t_user set age=30, city="广州", version=version+1 where name="wendal" and version=124;</code>
      *
      * @param obj         需要更新的对象, 必须带@Id/@Name/@Pk中的其中一种.
