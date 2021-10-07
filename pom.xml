@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.mapway</groupId>
     <artifactId>biz-common</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <name>openapi</name>
     <description>biz-common library</description>
     <url>http://biz-common.mapway.cn</url>
@@ -36,12 +36,17 @@
             <artifactId>nutz</artifactId>
             <version>1.r.66</version>
         </dependency>
+        <dependency>
+            <groupId>cn.mapway</groupId>
+            <artifactId>api-tools-doc</artifactId>
+            <version>3.20.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <java.version>1.8</java.version>
         <java.encoding>UTF-8</java.encoding>
         <encoding>UTF-8</encoding>
-        <gpg.keyname>1F8B2CB0A3E469D2</gpg.keyname>
+        <gpg.keyname>A8F40F67559C6E42BCBBBCDAEAEDD178CD598BBA</gpg.keyname>
         <!--        <gpg.keyname>8F43F628BFCC2B9A</gpg.keyname>-->
     </properties>
     <build>
@@ -56,6 +61,14 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,6 +1,8 @@
 package cn.mapway.biz.api;
 
 import cn.mapway.biz.constant.IBizCode;
+import cn.mapway.document.annotation.ApiField;
+import cn.mapway.document.annotation.Doc;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.io.Serializable;
  * @author zhangjs2@ziroom.com
  */
 @Data
+@Doc(value="API接口封装包")
 public class ApiResult<T> implements Serializable {
 
     /**
@@ -19,16 +22,19 @@ public class ApiResult<T> implements Serializable {
      * 第二类代码 用8位数字表示  XXXXXXXX 前4位为子系统编码 后四位为子系统内部编码(内部编码可以按照模块进行细分)
      * 其他子系统 请联系 zhangjs2@ziroom.com 制定代码
      */
+    @ApiField(value ="返回代码,200为处理正确的结果，其他为错误结果",example = "200")
     private Integer code;
 
     /**
      * 给客户端返回的必要提示信息，如果是业务出错信息，最好消息上添加上解决问题的方法和建议
      */
+    @ApiField(value ="返回代码部位200时，此字段返回错误的具体原因",example = "给客户端返回的必要提示信息，如果是业务出错信息，最好消息上添加上解决问题的方法和建议")
     private String message;
 
     /**
      * 各个接口返回的属于各个接口的返回数据
      */
+    @ApiField(value = "返回的具体类型")
     private T data;
 
 

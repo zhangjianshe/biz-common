@@ -1,6 +1,8 @@
 package cn.mapway.biz.api;
 
 import cn.mapway.biz.constant.IBizCode;
+import cn.mapway.document.annotation.ApiField;
+import cn.mapway.document.annotation.Doc;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,21 +19,28 @@ import java.util.List;
  */
 
 @Data
+@Doc(value="API接口封装包LIST")
 public class ApiListResult<T> implements Serializable {
     /**
      * 分页的大小
      */
+    @ApiField(value = "分页大小",example = "20")
     private Long pageSize;
     /**
      * 查询总条数
      */
+    @ApiField(value = "数据总条数",example = "20000")
     private Long total;
     /**
      * 当前搜索的页
      */
+    @ApiField(value = "当前页，从1 开始计数",example = "1")
     private Long page;
+    @ApiField(value = "返回代码",example = "200")
     private Integer code;
+    @ApiField(value = "消息",example = "")
     private String message;
+    @ApiField(value = "数据列表")
     private List<T> data;
 
     /**
