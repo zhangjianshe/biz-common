@@ -1,5 +1,7 @@
 package cn.mapway.biz.core;
 
+import cn.mapway.biz.exception.BizException;
+
 /**
  * 业务流处理器
  * 负责具体的执行逻辑额,
@@ -17,7 +19,7 @@ public abstract class AbstractBizExecutor<R, P> {
     /**
      * 线程相关的变量，用于Executor之间传递参数
      */
-    private static ThreadLocal<BizContext> threadLocalBizContext = ThreadLocal.withInitial(
+    private static final ThreadLocal<BizContext> threadLocalBizContext = ThreadLocal.withInitial(
             () -> {
                 return new BizContext();
             }
@@ -44,7 +46,13 @@ public abstract class AbstractBizExecutor<R, P> {
      * @return data
      */
     public BizResult<R> execute(BizContext context, BizRequest<P> request) {
-        return process(context, request);
+        try {
+            return process(context, request);
+        } catch (BizException exception) {
+            return BizResult.error(exception.getResponse());
+        } catch (Exception e) {
+            return BizResult.error(500, e.getMessage());
+        }
     }
 
     /**
