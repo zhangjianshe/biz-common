@@ -3,6 +3,8 @@ package cn.mapway.biz.core;
 import cn.mapway.biz.exception.BizException;
 import org.nutz.lang.Strings;
 
+import java.text.MessageFormat;
+
 /**
  * 业务流处理器
  * 负责具体的执行逻辑额,
@@ -72,9 +74,10 @@ public abstract class AbstractBizExecutor<R, P> {
      * @param data
      * @param message
      */
-    public void assertNotNull(Object data, String message) {
+    public void assertNotNull(Object data, String messageTemplate, String... values) {
         if (data == null) {
-            throw BizException.get(500, message);
+
+            throw BizException.get(500, formatMessage(messageTemplate, values));
         }
     }
 
@@ -84,9 +87,27 @@ public abstract class AbstractBizExecutor<R, P> {
      * @param data
      * @param message
      */
-    public void assertNotEmpty(String data, String message) {
+    public void assertNotEmpty(String data, String messageTemplate, String... values) {
         if (Strings.isBlank(data)) {
-            throw BizException.get(500, message);
+            throw BizException.get(500, formatMessage(messageTemplate, values));
+        }
+    }
+
+    /**
+     * 格式化消息
+     *
+     * @param messageTemplate
+     * @param values
+     * @return
+     */
+    protected String formatMessage(String messageTemplate, String[] values) {
+        if (messageTemplate == null) {
+            return "没有设置消息";
+        }
+        if (values == null || values.length == 0) {
+            return messageTemplate;
+        } else {
+            return MessageFormat.format(messageTemplate, values);
         }
     }
 
