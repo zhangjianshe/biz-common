@@ -1,6 +1,7 @@
 package cn.mapway.biz.core;
 
 import cn.mapway.biz.exception.BizException;
+import org.nutz.lang.Strings;
 
 /**
  * 业务流处理器
@@ -47,11 +48,45 @@ public abstract class AbstractBizExecutor<R, P> {
      */
     public BizResult<R> execute(BizContext context, BizRequest<P> request) {
         try {
+            validateParameter(request.getData());
             return process(context, request);
         } catch (BizException exception) {
             return BizResult.error(exception.getResponse());
         } catch (Exception e) {
             return BizResult.error(500, e.getMessage());
+        }
+    }
+
+    /**
+     * 验证参数 根据 validate
+     */
+    protected void validateParameter(P parameter) {
+        if (parameter == null) {
+            throw BizException.get(500, "需要传入参数");
+        }
+    }
+
+    /**
+     * 检查参数是否为空
+     *
+     * @param data
+     * @param message
+     */
+    public void assertNotNull(Object data, String message) {
+        if (data == null) {
+            throw BizException.get(500, message);
+        }
+    }
+
+    /**
+     * 检查字符串是否为空
+     *
+     * @param data
+     * @param message
+     */
+    public void assertNotEmpty(String data, String message) {
+        if (Strings.isBlank(data)) {
+            throw BizException.get(500, message);
         }
     }
 
@@ -72,4 +107,6 @@ public abstract class AbstractBizExecutor<R, P> {
      * @return result
      */
     protected abstract BizResult<R> process(BizContext context, BizRequest<P> bizParam);
+
+
 }
