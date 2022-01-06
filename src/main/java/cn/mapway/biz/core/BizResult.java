@@ -126,12 +126,16 @@ public class BizResult<T> implements Serializable {
     /**
      * @return ApiResult
      */
-    public ApiResult toApiResult() {
-        return ApiResult.result(code, message, data);
+    public <X> ApiResult<X> toApiResult() {
+        return (ApiResult<X>) ApiResult.result(code, message, data);
     }
 
 
-    /**
+    public <X> BizResult<X> asBizResult()
+    {
+        return (BizResult<X>)this;
+    }
+     /**
      * @return ApiListResult
      */
     public ApiListResult toApiListResult() {

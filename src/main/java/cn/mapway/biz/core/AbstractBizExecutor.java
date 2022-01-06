@@ -1,6 +1,7 @@
 package cn.mapway.biz.core;
 
 import cn.mapway.biz.exception.BizException;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 
 import java.text.MessageFormat;
@@ -55,7 +56,13 @@ public abstract class AbstractBizExecutor<R, P> {
         } catch (BizException exception) {
             return BizResult.error(exception.getResponse());
         } catch (Exception e) {
-            return BizResult.error(500, e.getMessage());
+            e.printStackTrace();
+            String message=e.getMessage();
+            if(Strings.isBlank(e.getMessage()))
+            {
+                e.getCause().getMessage();
+            }
+            return BizResult.error(500, message);
         }
     }
 
@@ -71,8 +78,9 @@ public abstract class AbstractBizExecutor<R, P> {
     /**
      * 检查参数是否为空
      *
-     * @param data
-     * @param message
+     * @param data            da
+     * @param messageTemplate t
+     * @param values          v
      */
     public void assertNotNull(Object data, String messageTemplate, String... values) {
         if (data == null) {
@@ -82,13 +90,28 @@ public abstract class AbstractBizExecutor<R, P> {
     }
 
     /**
-     * 检查字符串是否为空
+     * 检查参数是否为空
      *
-     * @param data
-     * @param message
+     * @param data            da
+     * @param messageTemplate t
+     * @param values          v
      */
-    public void assertNotEmpty(String data, String messageTemplate, String... values) {
-        if (Strings.isBlank(data)) {
+    public void assertTrue(Boolean data, String messageTemplate, String... values) {
+        if (!data) {
+            throw BizException.get(500, formatMessage(messageTemplate, values));
+        }
+    }
+
+
+    /**
+     * 检查对象是否为空
+     *
+     * @param data            da
+     * @param messageTemplate t
+     * @param values          v
+     */
+    public void assertNotEmpty(Object data, String messageTemplate, String... values) {
+        if (Lang.isEmpty(data)){
             throw BizException.get(500, formatMessage(messageTemplate, values));
         }
     }
