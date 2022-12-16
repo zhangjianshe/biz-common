@@ -81,7 +81,6 @@ public class BizResult<T> implements Serializable {
      * @param message message
      * @return data
      */
-    @Deprecated
     public static BizResult error(Integer code, String message) {
         return new BizResult(code, message);
     }
@@ -92,8 +91,8 @@ public class BizResult<T> implements Serializable {
      * @param data object
      * @return data
      */
-    public static BizResult success(Object data) {
-        BizResult result = new BizResult(SystemCodeEnum.SUCCESS);
+    public static <T> BizResult<T> success(T data) {
+        BizResult<T> result = new BizResult<T>(SystemCodeEnum.SUCCESS);
         result.setData(data);
         return result;
     }

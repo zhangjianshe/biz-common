@@ -37,7 +37,6 @@ public abstract class AbstractBizExecutor<R, P> {
      * @param request 执行需要的参数
      * @return result
      */
-    @Deprecated
     public BizResult<R> execute(BizRequest<P> request) {
         return process(threadLocalBizContext.get(), request);
     }
