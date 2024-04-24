@@ -23,7 +23,7 @@ public abstract class AbstractBizExecutor<R, P> {
     /**
      * 线程相关的变量，用于Executor之间传递参数
      */
-    private static final ThreadLocal<BizContext> threadLocalBizContext = ThreadLocal.withInitial(
+    protected static final ThreadLocal<BizContext> threadLocalBizContext = ThreadLocal.withInitial(
             () -> {
                 return new BizContext();
             }
