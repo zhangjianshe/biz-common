@@ -28,6 +28,14 @@ public class BaseDao<T> {
                 .getGenericSuperclass();
         this.clazz = (Class<T>) type.getActualTypeArguments()[0];
     }
+
+    /**
+     * 设置刀
+     * @param dao
+     */
+    public void setDao(Dao dao) {
+        this.dao = dao;
+    }
     /**
      * 把刀
      *
