@@ -48,12 +48,8 @@ jobs:
 
       # 3. Publish and Deploy to Maven Central (Fixes 401 and settings-security.xml errors)
       - name: Publish to Maven Central
-        # -P release: Activates the release profile (sources, javadoc, signing) in pom.xml
-        # -D... flags: Overrides configuration files to provide credentials/passphrase directly.
-        run: mvn --batch-mode deploy -P release \
-          -Dgpg.keyname=B62622FD20A7594D18EBADC613811CD56A6956AE \
-          -Dcentral-publishing.username=${{ secrets.MAVEN_USERNAME }} \
-          -Dcentral-publishing.password=${{ secrets.MAVEN_PASSWORD }}
+        # FIX: The command has been consolidated into a single line to avoid line continuation syntax errors.
+        run: mvn --batch-mode deploy -P release -Dgpg.keyname=B62622FD20A7594D18EBADC613811CD56A6956AE -Dcentral-publishing.username=${{ secrets.MAVEN_USERNAME }} -Dcentral-publishing.password=${{ secrets.MAVEN_PASSWORD }}
 
         # Environment variables used by the GPG plugin for signing in batch mode
         env:
