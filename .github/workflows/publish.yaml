@@ -31,6 +31,8 @@ jobs:
           # This correctly imports the GPG key into the runner's keyring
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      - name: check information
+        run: cat /home/runner/.m2/settings.xml
 
       - name: Publish to Maven Central
         # FIX: Explicitly pass GPG, Username, and Password properties to ensure the
