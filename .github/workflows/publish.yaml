@@ -1,6 +1,15 @@
 name: Publish biz-common to Maven Central
 
 on:
+  # 1. New trigger: Allows manual triggering from the GitHub UI
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version being deployed (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+  # 2. Keep the original trigger: Still runs automatically when a release is created
   release:
     types: [created]
 
@@ -23,8 +32,7 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Publish to Maven Central
-        # CRITICAL FIX: Activate the 'release' profile (-P release) to execute
-        # the GPG signing, source, and Javadoc plugins defined there.
+        # Use the release profile, as established earlier
         run: mvn --batch-mode deploy -P release
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
