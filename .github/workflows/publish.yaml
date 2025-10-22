@@ -23,7 +23,9 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Publish to Maven Central
-        run: mvn --batch-mode deploy
+        # CRITICAL FIX: Activate the 'release' profile (-P release) to execute
+        # the GPG signing, source, and Javadoc plugins defined there.
+        run: mvn --batch-mode deploy -P release
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
