@@ -109,6 +109,14 @@
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                    <!-- Explicitly set the key ID for the signer. -->
+                                    <keyname>B62622FD20A7594D18EBADC613811CD56A6956AE</keyname>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
