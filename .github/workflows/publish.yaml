@@ -1,6 +1,5 @@
-name: Publish biz-common to Maven Central
+name: Publish to Maven Central
 
-# Configure Triggers:
 on:
   # Triggers when a new Git tag is pushed (e.g., git push --tags)
   push:
@@ -22,40 +21,18 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-
-      # 1. Setup JDK 17 Environment
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-          # FIX: Re-adding server-id: central. This is necessary because the central-publishing plugin
-          # fails with "server is null" if the server block is missing from settings.xml.
-          # This satisfies the internal lookup requirement.
-          server-id: central
-
-      # 2. Robust GPG Key Import and Trust Setup (Fixes "No secret key" and /dev/tty error)
-      - name: Import GPG Private Key and Set Trust
-        run: |
-          # Write the secret key to a temporary file for reliable multi-line import
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" > private.key
-          
-          # Import the key using gpg in batch mode
-          gpg --batch --yes --import private.key
-          
-          # FIX: Explicitly set full trust (trust level 5) for the key non-interactively.
-          # This command uses the format <key_fingerprint>:5: and avoids the /dev/tty error.
-          echo "B62622FD20A7594D18EBADC613811CD56A6956AE:5:" | gpg --import-ownertrust
-          
-          # Clean up the temporary key file
-          rm private.key
-
-      # 3. Publish and Deploy to Maven Central (Fixes 401 and settings-security.xml errors)
+          server-id: central # Match the id in pom.xml
+          server-username: ${{ secrets.MAVEN_USERNAME }}
+          server-password: ${{ secrets.MAVEN_PASSWORD }}
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Publish to Maven Central
-        # We removed -Dcentral-publishing.serverid=skip-lookup as it was ineffective.
-        # We rely on the fact that -D...username/password overrides the settings.xml credentials.
-        run: mvn --batch-mode deploy -P release -Dgpg.keyname=B62622FD20A7594D18EBADC613811CD56A6956AE -Dcentral-publishing.username=${{ secrets.MAVEN_USERNAME }} -Dcentral-publishing.password=${{ secrets.MAVEN_PASSWORD }}
-
-        # Environment variables used by the GPG plugin for signing in batch mode
+        run: mvn --batch-mode deploy
         env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
