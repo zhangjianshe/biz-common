@@ -1,17 +1,18 @@
 name: Publish biz-common to Maven Central
 
+
 on:
-  # 1. New trigger: Allows manual triggering from the GitHub UI
+  push:
+    tags:
+      - '*'
   workflow_dispatch:
     inputs:
-      version:
-        description: 'The version being deployed (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
+      tag:
+        description: 'Tag to use for Docker images'
+        required: false
+        default: 'manual-run'
 
-  # 2. Keep the original trigger: Still runs automatically when a release is created
-  release:
-    types: [created]
+
 
 jobs:
   publish:
