@@ -41,7 +41,8 @@ jobs:
         # FIX 3: Removed -Dgpg.passphrase due to the warning. We rely on MAVEN_GPG_PASSPHRASE
         # environment variable (set in the previous step) and the 'loopback' configuration in pom.xml.
         # This guarantees credentials are used as system properties for the publishing plugin.
-        run: mvn --batch-mode deploy -P release -Dgpg.keyname=37C524B4129958D4 -Dcentral-publishing.username=${{ secrets.MAVEN_USERNAME }} -Dcentral-publishing.password=${{ secrets.MAVEN_PASSWORD }}
+
+        run: mvn --batch-mode deploy -P release -Dgpg.keyname=B62622FD20A7594D18EBADC613811CD56A6956AE -Dcentral-publishing.username=${{ secrets.MAVEN_USERNAME }} -Dcentral-publishing.password=${{ secrets.MAVEN_PASSWORD }}
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
