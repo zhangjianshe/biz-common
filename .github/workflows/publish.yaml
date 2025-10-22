@@ -30,7 +30,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 2. Robust GPG Key Import and Trust Setup (Fixes "No secret key")
+      # 2. Robust GPG Key Import and Trust Setup (Fixes "No secret key" and /dev/tty error)
       - name: Import GPG Private Key and Set Trust
         run: |
           # Write the secret key to a temporary file for reliable multi-line import
@@ -39,10 +39,9 @@ jobs:
           # Import the key using gpg in batch mode
           gpg --batch --yes --import private.key
           
-          # Explicitly set full trust for the key. This is CRITICAL for GPG in headless CI 
-          # to allow the key to be used for signing. 
-          # The command below feeds gpg "5" (I trust) and "y" (yes, confirm).
-          echo -e "5\ny\n" | gpg --command-fd 0 --edit-key B62622FD20A7594D18EBADC613811CD56A6956AE trust
+          # FIX: Explicitly set full trust (trust level 5) for the key non-interactively.
+          # This command uses the format <key_fingerprint>:5: and avoids the /dev/tty error.
+          echo "B62622FD20A7594D18EBADC613811CD56A6956AE:5:" | gpg --import-ownertrust
           
           # Clean up the temporary key file
           rm private.key
