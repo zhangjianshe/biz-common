@@ -24,20 +24,25 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          # FIX: We MUST remove 'server-id' entirely to prevent the creation of the
-          # conflicting <server> entry in settings.xml. We rely solely on -D properties.
+        with
+        java-version: '17'
+        distribution: 'temurin'
+        # FIX 1: Removed GPG secrets from setup-java as it was failing to import the key.
 
-          # This correctly imports the GPG key into the runner's keyring
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      # FIX 2: Manually import the private key using the GPG command line. This is far more reliable.
+      - name: Import GPG Private Key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          # Export the passphrase to an environment variable the GPG plugin is configured to read.
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish to Maven Central
-        # This command is now the *only* source of authentication and signing configuration.
-        # This guarantees credentials are used as system properties, which overrides settings.xml.
-        run: mvn --batch-mode deploy -P release -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Dgpg.keyname=37C524B4129958D4 -Dcentral-publishing.username=${{ secrets.MAVEN_USERNAME }} -Dcentral-publishing.password=${{ secrets.MAVEN_PASSWORD }}
+        # FIX 3: Removed -Dgpg.passphrase due to the warning. We rely on MAVEN_GPG_PASSPHRASE
+        # environment variable (set in the previous step) and the 'loopback' configuration in pom.xml.
+        # This guarantees credentials are used as system properties for the publishing plugin.
+        run: mvn --batch-mode deploy -P release -Dgpg.keyname=37C524B4129958D4 -Dcentral-publishing.username=${{ secrets.MAVEN_USERNAME }} -Dcentral-publishing.password=${{ secrets.MAVEN_PASSWORD }}
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+
