@@ -24,9 +24,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
-        with
-        java-version: '17'
-        distribution: 'temurin'
+        with:
+          java-version: '17'
+          distribution: 'temurin'
         # FIX 1: Removed GPG secrets from setup-java as it was failing to import the key.
 
       # FIX 2: Manually import the private key using the GPG command line. This is far more reliable.
