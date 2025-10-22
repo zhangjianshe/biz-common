@@ -125,13 +125,13 @@
                                 </goals>
                                 <configuration>
                                     <!--
-                                      FIX: Explicitly tell the plugin to use the GPG_PASSPHRASE
-                                      environment variable, which is set by actions/setup-java.
-                                      This prevents it from looking for settings-security.xml.
+                                      *** REMOVE THIS LINE ENTIRELY: ***
+                                      <passphrase>${env.GPG_PASSPHRASE}</passphrase>
                                     -->
-                                    <passphrase>${env.GPG_PASSPHRASE}</passphrase>
-
-                                    <!-- Also keep the loopback mode argument -->
+                                    <!--
+                                      OPTIONAL BUT RECOMMENDED: You can add <keyname> here
+                                      if you have multiple keys, but keep <passphrase> removed
+                                    -->
                                     <gpgArguments>
                                         <arg>--pinentry-mode</arg>
                                         <arg>loopback</arg>
@@ -140,6 +140,7 @@
                             </execution>
                         </executions>
                     </plugin>
+
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
