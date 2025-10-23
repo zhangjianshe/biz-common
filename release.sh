@@ -62,7 +62,7 @@ if [ ! -f "$POM_FILE" ]; then
     exit 1
 fi
 
- 3. Check for uncommitted changes (prevents tagging a dirty tree)
+# 3. Check for uncommitted changes (prevents tagging a dirty tree)
 if [ -n "$(git status --porcelain)" ]; then
     echo "Error: You have uncommitted changes. Please commit or stash them before running." >&2
     exit 1
