@@ -17,7 +17,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read,write
       packages: write
     steps:
       - uses: actions/checkout@v4
@@ -31,8 +31,9 @@ jobs:
           server-password: ${{ secrets.MAVEN_PASSWORD }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          cache: 'maven'
       - name: Publish to Maven Central
-        run: mvn --batch-mode deploy
+        run: mvn --batch-mode clean compile install deploy -P release
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
