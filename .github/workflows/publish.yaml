@@ -35,5 +35,6 @@ jobs:
       - name: Publish to Maven Central
         run: mvn -X --batch-mode clean compile install deploy -P release -ntp
         env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
