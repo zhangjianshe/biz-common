@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.mapway</groupId>
     <artifactId>biz-common</artifactId>
-    <version>1.8.42</version>
+    <version>1.8.43</version>
     <name>biz-common</name>
     <description>biz-common library</description>
     <url>https://biz-common.mapway.cn</url>
