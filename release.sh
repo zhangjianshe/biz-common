@@ -62,7 +62,7 @@ if [ ! -f "$POM_FILE" ]; then
     exit 1
 fi
 
-# 3. Check for uncommitted changes (prevents tagging a dirty tree)
+ 3. Check for uncommitted changes (prevents tagging a dirty tree)
 if [ -n "$(git status --porcelain)" ]; then
     echo "Error: You have uncommitted changes. Please commit or stash them before running." >&2
     exit 1
@@ -71,7 +71,7 @@ fi
 # 4. Extract current version from pom.xml
 echo "Reading current version from $POM_FILE..."
 # Use grep and sed to safely extract the version from the main <version> tag
-CURRENT_VERSION=$(grep -m 1 -A 1 '<groupId' "$POM_FILE" | grep -A 1 '<artifactId' | grep -A 1 '<version' | grep '<version' | sed -e 's/.*<version>//' -e 's/<\/version>.*//' | head -n 1 | sed 's/ //g')
+CURRENT_VERSION=$(grep -m 1 -A 3 '<groupId' "$POM_FILE" | grep -A 3 '<artifactId' | grep -A 1 '<version' | grep '<version' | sed -e 's/.*<version>//' -e 's/<\/version>.*//' | head -n 1 | sed 's/ //g')
 
 if [ -z "$CURRENT_VERSION" ]; then
     echo "Error: Could not extract version from $POM_FILE. Ensure the main <version> tag is present." >&2
