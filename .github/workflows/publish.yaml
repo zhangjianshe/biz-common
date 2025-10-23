@@ -26,7 +26,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          server-id: central # Match the id in pom.xml
+          server-id: central
           server-username: ${{ secrets.MAVEN_USERNAME }}
           server-password: ${{ secrets.MAVEN_PASSWORD }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
