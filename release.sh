@@ -119,8 +119,10 @@ execute git commit -m "$COMMIT_MSG"
 echo "Creating tag ${TAG}..."
 execute git tag -a "$TAG" -m "Version ${NEW_VERSION}"
 
+
 # 9. Push the tag to origin
 echo "Pushing tag ${TAG} to origin..."
+execute git push origin 
 execute git push origin "$TAG"
 
 echo ""
