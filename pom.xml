@@ -10,6 +10,7 @@
     <description>biz-common library</description>
     <url>https://biz-common.mapway.cn</url>
     <packaging>jar</packaging>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -17,15 +18,26 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <scm>
         <url>https://github.com/zhangjianshe/biz-common.git</url>
     </scm>
+
     <developers>
         <developer>
             <name>zhangjianshe</name>
             <email>zhangjianshe@gmail.com</email>
         </developer>
     </developers>
+
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -49,29 +61,27 @@
             <version>1.3.2</version>
         </dependency>
     </dependencies>
-    <properties>
-        <java.version>11</java.version>
-        <java.encoding>UTF-8</java.encoding>
-        <encoding>UTF-8</encoding>
-    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>release</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.13.0</version>
-                        <configuration>
-                            <source>${java.version}</source>
-                            <target>${java.version}</target>
-                        </configuration>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -91,8 +101,8 @@
                         <version>3.3.1</version>
                         <executions>
                             <execution>
+                                <id>release-sources</id>
                                 <phase>package</phase>
-                                <id>attach-sources</id>
                                 <goals>
                                     <goal>jar-no-fork</goal>
                                 </goals>
