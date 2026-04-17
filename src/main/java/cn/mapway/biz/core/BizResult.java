@@ -8,6 +8,8 @@ import cn.mapway.biz.constant.BizCode;
 import cn.mapway.biz.constant.IBizCode;
 import cn.mapway.biz.exception.BizException;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,12 +20,13 @@ import java.util.Objects;
  * 业务流返回对象的基类
  */
 @Data
+@Getter
+@Setter
 public class BizResult<T> implements Serializable {
     private Integer code;
     private String message;
     private List<IBizCode> errorList;
     private BizFlowOperator flowOperator;
-
     private T data;
     private long total;
     private long current;
@@ -70,8 +73,8 @@ public class BizResult<T> implements Serializable {
      * @param messages messages
      * @return data
      */
-    public static BizResult error(IBizCode bizCode, String... messages) {
-        return new BizResult(bizCode, messages);
+    public static <T> BizResult<T> error(IBizCode bizCode, String... messages) {
+        return new BizResult<>(bizCode, messages);
     }
 
     /**
@@ -81,8 +84,8 @@ public class BizResult<T> implements Serializable {
      * @param message message
      * @return data
      */
-    public static BizResult error(Integer code, String message) {
-        return new BizResult(code, message);
+    public static <T> BizResult<T> error(Integer code, String message) {
+        return new BizResult<>(code, message);
     }
 
     /**
@@ -103,8 +106,8 @@ public class BizResult<T> implements Serializable {
      *
      * @return data
      */
-    public static BizResult emptyList() {
-        BizResult result = new BizResult(SystemCodeEnum.SUCCESS);
+    public static <T> BizResult<List<T>> emptyList() {
+        BizResult<List<T>> result = new BizResult<>(SystemCodeEnum.SUCCESS);
         result.setListInfo(0l, 1l, 100l);
         result.setData(new ArrayList<>());
         return result;
@@ -115,8 +118,8 @@ public class BizResult<T> implements Serializable {
      * @param data    data
      * @return data
      */
-    public static BizResult create(IBizCode bizCode, Object data) {
-        BizResult result = new BizResult(bizCode);
+    public static <T> BizResult<T> create(IBizCode bizCode, T data) {
+        BizResult<T> result = new BizResult<>(bizCode);
         result.setData(data);
         return result;
     }
@@ -143,22 +146,6 @@ public class BizResult<T> implements Serializable {
         result.setTotal(total);
         result.setPage(current);
         return result;
-    }
-
-
-    /**
-     * @return T d
-     */
-    public T getData() {
-        return data;
-    }
-
-
-    /**
-     * @param data data
-     */
-    public void setData(T data) {
-        this.data = data;
     }
 
 
@@ -251,14 +238,6 @@ public class BizResult<T> implements Serializable {
 
 
     /**
-     * @return error list
-     */
-    public List<IBizCode> getErrorList() {
-        return errorList;
-    }
-
-
-    /**
      * @param errorList error list
      */
     public void setErrorList(List<IBizCode> errorList) {
@@ -275,36 +254,6 @@ public class BizResult<T> implements Serializable {
         this.errorList.add(bizError);
     }
 
-
-    /**
-     * @return long
-     */
-    public long getPageSize() {
-        return pageSize;
-    }
-
-
-    /**
-     * @param pageSize pageSiz
-     */
-    public void setPageSize(long pageSize) {
-        this.pageSize = pageSize;
-    }
-
-
-    /**
-     * @return long
-     */
-    public long getCurrent() {
-        return current;
-    }
-
-    /**
-     * @param current current
-     */
-    public void setCurrent(long current) {
-        this.current = current;
-    }
 
     /**
      * 设置返回值的列表信息

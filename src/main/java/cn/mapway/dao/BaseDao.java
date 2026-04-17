@@ -1,5 +1,7 @@
 package cn.mapway.dao;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.nutz.dao.*;
 import org.nutz.dao.entity.Entity;
 import org.nutz.dao.pager.Pager;
@@ -19,6 +21,8 @@ import java.util.List;
 public class BaseDao<T> {
 
     @Resource
+    @Getter
+    @Setter
     protected Dao dao;
     private Class<T> clazz;
 
@@ -29,21 +33,6 @@ public class BaseDao<T> {
         this.clazz = (Class<T>) type.getActualTypeArguments()[0];
     }
 
-    /**
-     * 设置刀
-     * @param dao
-     */
-    public void setDao(Dao dao) {
-        this.dao = dao;
-    }
-    /**
-     * 把刀
-     *
-     * @return {@link Dao}
-     */
-    public Dao getDao() {
-        return dao;
-    }
 
     /**
      * 元
